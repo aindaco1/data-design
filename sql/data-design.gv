@@ -1,0 +1,207 @@
+digraph G {
+	/* entities */
+	album [shape=box];
+	releases [shape=box];
+	credits [shape=box];
+	genre [shape=box];
+	styles [shape=box];
+	moods [shape=box];
+	themes [shape=box];
+	tracks [shape=box];
+	tracksReview [shape=box];
+	tracksReviewAuthor [shape=box];
+	albumReview [shape=box];
+	albumReviewAuthor [shape=box];
+	author [shape=box];
+	artist [shape=box];
+	userRating [shape=box];
+	user [shape=box];
+	similarAlbums [shape=box,peripheries=2];
+	albumMoods [shape=box,peripheries=2];
+	albumThemes [shape=box,peripheries=2];
+	albumStyles [shape=box,peripheries=2];
+	albumGenre [shape=box,peripheries=2];
+	albumArtist [shape=box,peripheries=2];
+
+	/* primary keys */
+	albumId_pk [label=<<u>albumId</u>>];
+	artistId_pk [label=<<u>artistId</u>>];
+	authorId_pk [label=<<u>authorId</u>>];
+	tracksId_pk [label=<<u>tracksId</u>>];
+	userId_pk [label=<<u>userId</u>>];
+	themesId_pk [label=<<u>themesId</u>>];
+	genreId_pk [label=<<u>genreId</u>>];
+	moodsId_pk [label=<<u>moodsId</u>>];
+	stylesId_pk [label=<<u>stylesId</u>>];
+	albumReviewText_pk [label=<<u>albumReviewText</u>>];
+	tracksReviewText_pk [label=<<u>tracksReviewText</u>>];
+
+	/* foreign keys */
+	albumId_fk [label=<<u>albumId</u>>];
+	artistId_fk [label=<<u>artistId</u>>];
+	authorId_fk [label=<<u>authorId</u>>];
+	tracksId_fk [label=<<u>tracksId</u>>];
+	userId_fk [label=<<u>userId</u>>];
+
+	/* weak primary keys */
+	albumId_weak_pk [label=<<u>albumId</u>>];
+	artistId_weak_pk [label=<<u>artistId</u>>];
+	themesId_weak_pk [label=<<u>themesId</u>>];
+	genreId_weak_pk [label=<<u>genreId</u>>];
+	moodsId_weak_pk [label=<<u>moodsId</u>>];
+	stylesId_weak_pk [label=<<u>stylesId</u>>];
+
+	/* relations */
+	has [shape=diamond];
+	are [shape=diamond];
+	writes [shape=diamond];
+	album -> has [label=“m”];
+	has -> albumMoods [label="n"];
+	moods -> are [label=“1”];
+	are -> albumMoods [label=“n”];
+	album -> has [label=“m”];
+	has -> albumStyles [label="n"];
+	styles -> are [label=“1”];
+	are -> albumStyles [label=“n”];
+	album -> has [label=“m”];
+	has -> albumGenre [label="n"];
+	genre -> are [label=“1”];
+	are -> albumGenre [label=“n”];
+	album -> has [label=“m”];
+	has -> albumThemes [label="n"];
+	themes -> are [label=“1”];
+	are -> albumThemes [label=“n”];
+	album -> has [label=“m”];
+	has -> albumTracks [label="n"];
+	tracks -> are [label=“1”];
+	are -> albumTracks [label=“n”];
+	album -> has [label=“1”];
+	has -> credits [label="n"];
+	album -> has [label=“1”];
+	has -> awards [label="n"];
+	album -> has [label=“1”];
+	has -> albumReview [label=“1”];
+	albumReviewAuthor -> writes [label=“1”];
+	writes -> albumReview [label="n"];
+	tracks -> has [label=“1”];
+	has -> tracksReview [label=“1”];
+	tracksReviewAuthor -> writes [label=“1”];
+	writes -> tracksReview [label="n"];
+	author -> are [label=“1”];
+	are -> tracksReviewAuthor [label=“1”];
+	author -> are [label=“1”];
+	are -> albumReviewAuthor [label=“1”];
+	album -> has [label=“m”];
+	has -> albumArtist [label=“n”]
+	albumArtist -> are [label=“1”];
+	are -> artist [label=“n”];
+	album -> has [label=“1”];
+	has -> userRating [label="n"];
+	user -> sets [label=“1”];
+	sets -> userRating [label="n"];
+	album -> has [label=“1”];
+	has -> similarAlbums [label=“n”];
+
+	/* album attributes */
+	album -> albumId_pk;
+	album -> duration;
+	album -> albumAllmusicPick;
+	album -> streamBuy;
+	album -> allmusicRating;
+	album -> releaseDate;
+	album -> releaseYear;
+	album -> recordingDate;
+
+	/* releases attributes */
+	releases -> releasesId_pk;
+	releases -> albumId_fk;
+	releases -> format;
+	releases -> releasesTitle;
+	releases -> releasesYear;
+	releases -> label;
+
+	/* credits attributes */
+	credits -> credit;
+	credits -> artistId_fk;
+	credits -> albumId_fk;
+
+	/* genre attributes */
+	genre -> genreId_pk;
+	genre -> genreDescription;
+
+	/* styles attributes */
+	styles -> stylesId_pk;
+	styles -> stylesDescription;
+
+	/* themes attributes */
+	themes -> themesId_pk;
+	themes -> themesDescription;
+
+	/* moods attributes */
+	moods -> moodsId_pk;
+	moods -> moodsDescription;
+
+	/* tracks attributes */
+	tracks -> tracksId_pk;
+	tracks -> composer;
+	tracks -> performer;
+	tracks -> time;
+	tracks -> tracksReview;
+	tracks -> label;
+
+	/* tracksReview attributes */
+	tracksReview -> tracksReviewText_pk;
+	tracksReview -> tracksId_fk;
+	tracksReview -> authorId_fk;
+
+	/* albumReview attributes */
+	albumReview -> albumReviewText_pk;
+	albumReview -> albumId_fk;
+	albumReview -> authorId_fk;
+
+	/* tracksReviewAuthor attributes */
+	tracksReviewAuthor -> authorId_fk;
+	tracksReviewAuthor -> tracksId_fk;
+
+	/* albumReviewAuthor attributes */
+	albumReviewAuthor -> authorId_fk;
+	albumReviewAuthor -> albumId_fk;
+
+	/* author attributes */
+	author -> authorId_pk;
+	author -> authorName;
+
+	/* albumArtist attributes */
+	albumArtist -> artistId_weak_pk;
+	albumArtist -> albumId_weak_pk;
+
+	/* artist attributes */
+	artist -> artistId_pk;
+	artist -> artistName;
+
+	/* userRating attributes */
+	userRating -> userId_fk;
+	userRating -> albumId_fk;
+	userRating -> rating;
+
+	/* user attributes */
+	user -> userId_pk;
+	user -> userLogin;
+
+	/* albumMoods attributes */
+	albumMoods -> moodsId_weak_pk;
+	albumMoods -> albumId_weak_pk;
+
+	/* albumThemes attributes */
+	albumThemes -> themesId_weak_pk;
+	albumThemes -> albumId_weak_pk;
+
+	/* albumStyles attributes */
+	albumStyles -> stylesId_weak_pk;
+	albumStyles -> albumId_weak_pk;
+
+	/* albumGenre attributes */
+	albumGenre -> genreId_weak_pk;
+	albumGenre -> albumId_weak_pk;
+
+}
