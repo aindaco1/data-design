@@ -1,4 +1,5 @@
-digraph G {
+digraph allmusic {
+
 	/* entities */
 	album [shape=box];
 	releases [shape=box];
@@ -27,6 +28,7 @@ digraph G {
 	artistId_pk [label=<<u>artistId</u>>];
 	authorId_pk [label=<<u>authorId</u>>];
 	tracksId_pk [label=<<u>tracksId</u>>];
+	awardsId_pk [label=<<u>awardsId</u>>];
 	userId_pk [label=<<u>userId</u>>];
 	themesId_pk [label=<<u>themesId</u>>];
 	genreId_pk [label=<<u>genreId</u>>];
@@ -55,6 +57,7 @@ digraph G {
 	are [shape=diamond];
 	writes [shape=diamond];
 	similar [shape=diamond];
+	sets [shape=diamond];
 	album -> has [label="m"];
 	has -> albumMoods [label="n"];
 	moods -> are [label="1"];
@@ -124,6 +127,12 @@ digraph G {
 	credits -> credit;
 	credits -> artistId_fk;
 	credits -> albumId_fk;
+
+	/* awards attributes */
+	awards -> awardsId_pk;
+	awards -> awardsYear;
+	awards -> awardsTitle;
+	awards -> albumId_fk;
 
 	/* genre attributes */
 	genre -> genreId_pk;
