@@ -26,8 +26,30 @@ class Awards {
 	 **/
 	private $awardsTitle;
 
-	// CONSTRUCTOR GOES HERE
-
+	/**
+	 * constructor for this Award
+	 *
+	 * @param mixed $newAwardsId id of this Award
+	 * @param mixed $newAlbumId id of the Album that received the Award
+	 * @param mixed $newAwardsYear year Award was received
+	 * @param mixed $newAwardsTitle title of the Award
+	 * @throws InvalidArgumentException if data types are not valid
+	 * @throws RangeException if data values are out of bounds (e.g., strings too long, negative integers)
+	 **/
+	public function __construct($newAwardsId, $newAlbumId, $newAwardsYear, $newAwardsTitle) {
+		try {
+			$this->setAwardsId($newAwardsId);
+			$this->setAlbumId($newAlbumId);
+			$this->setAwardsYear($newAwardsYear);
+			$this->setAwardsTitle($newAwardsTitle);
+		} catch(InvalidArgumentException $invalidArgument) {
+			// rethrow the exception to the caller
+			throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
+		} catch(RangeException $range) {
+			// rethrow the exception to the caller
+			throw(new RangeException($range->getMessage(), 0, $range));
+		}
+	}
 	/**
 	 * accessor method for award id
 	 *
