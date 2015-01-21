@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Awards received for an album on allmusic.com
+ * Awards received for an album as represented on allmusic.com
  *
  * This class represents industry awards received for the release, sales, or critical acclaim of an album
  * as represented on allmusic.com.
@@ -127,7 +127,7 @@ class Awards {
 			throw(new RangeException("awards year is a future year"));
 		}
 		// verify the award year is not an ancient year
-		if($newAwardsYear <= 1500) {
+		if($newAwardsYear <= 1857) {
 			throw(new RangeException("awards year is an ancient year"));
 		}
 		// convert and store the awards id
