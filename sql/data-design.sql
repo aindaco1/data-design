@@ -40,12 +40,13 @@ CREATE TABLE credits (
 );
 
 CREATE TABLE awards (
-	albumId  INT UNSIGNED AUTO_INCREMENT NOT NULL,
-	awardsId INT UNSIGNED                NOT NULL,
+	albumId  INT UNSIGNED NOT NULL,
+	awardsId INT UNSIGNED AUTO_INCREMENT          NOT NULL,
 	awardsYear  SMALLINT UNSIGNED NOT NULL,
 	awardsTitle  VARCHAR(128) NOT NULL,
 	INDEX (albumId),
 	INDEX (awardsId),
+	UNIQUE (albumId, awardsYear, awardsTitle),
 	FOREIGN KEY (albumId) REFERENCES album (albumId),
 	PRIMARY KEY (awardsId)
 );

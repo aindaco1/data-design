@@ -3,7 +3,7 @@
 require_once("awards.php");
 
 // use constructor to create object
-$awards = new Awards(null, 1, 1967, "Billboard Top 200");
+$awards = new Awards(null, 1, 2013, "Top Pop Catalog");
 
 // connect to mySQL and populate the database
 
