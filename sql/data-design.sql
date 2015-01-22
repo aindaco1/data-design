@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS album;
-DROP TABLE IF EXISTS credits;
 DROP TABLE IF EXISTS artist;
+DROP TABLE IF EXISTS credits;
+DROP TABLE IF EXISTS awards;
 DROP TABLE IF EXISTS styles;
 DROP TABLE IF EXISTS genre;
 DROP TABLE IF EXISTS albumArtist;
@@ -36,6 +37,17 @@ CREATE TABLE credits (
 	FOREIGN KEY(artistId) REFERENCES artist(artistId),
 	FOREIGN KEY(albumId) REFERENCES album(albumId),
 	PRIMARY KEY(albumId)
+);
+
+CREATE TABLE awards (
+	albumId  INT UNSIGNED AUTO_INCREMENT NOT NULL,
+	awardsId INT UNSIGNED                NOT NULL,
+	awardsYear  YEAR NOT NULL,
+	awardsTitle  VARCHAR(128) NOT NULL,
+	INDEX (albumId),
+	INDEX (awardsId),
+	FOREIGN KEY (albumId) REFERENCES album (albumId),
+	PRIMARY KEY (awardsId)
 );
 
 CREATE TABLE genre (

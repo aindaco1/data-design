@@ -187,5 +187,126 @@ class Awards {
 		// store the award title
 		$this->awardsTitle = $newAwardsTitle;
 	}
+
+	/**
+	 * inserts this Award into mySQL
+	 *
+	 * @param resource $mysqli pointer to mySQL connection, by reference
+	 * @throws mysqli_sql_exception when mySQL related errors occur
+	 **/
+	public function insert(&$mysqli) {
+		// handle degenerate cases
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+
+		// enforce the awardId is null (i.e., don't insert an award that already exists)
+		if($this->awardsId !== null) {
+			throw(new mysqli_sql_exception("not a new award"));
+		}
+
+		// create query template
+		$query	 = "INSERT INTO aindacochea.awards(albumId, awardsTitle, awardsYear) VALUES(?, ?, ?)";
+		$statement = $mysqli->prepare($query);
+		if($statement === false) {
+			throw(new mysqli_sql_exception("unable to prepare statement"));
+		}
+
+		// bind the member variables to the place holders in the template
+		$wasClean	  = $statement->bind_param("iisi", $this->awardsId, $this->albumId, $this->awardsTitle, $this->awardsYear);
+		if($wasClean === false) {
+			throw(new mysqli_sql_exception("unable to bind parameters"));
+		}
+
+		// execute the statement
+		if($statement->execute() === false) {
+			throw(new mysqli_sql_exception("unable to execute mySQL statement"));
+		}
+
+		// update the null awardsId with what mySQL just gave us
+		$this->awardsId = $mysqli->insert_id;
+		// clean up the statement
+		$statement->close();
+	}
+
+
+	/**
+	 * deletes this Award from mySQL
+	 *
+	 * @param resource $mysqli pointer to mySQL connection, by reference
+	 * @throws mysqli_sql_exception when mySQL related errors occur
+	 **/
+	public function delete(&$mysqli) {
+		// handle degenerate cases
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+
+		// enforce the awardsId is not null (i.e., don't delete an Award that hasn't been inserted)
+		if($this->awardsId === null) {
+			throw(new mysqli_sql_exception("unable to delete an award that does not exist"));
+		}
+
+		// create query template
+		$query	 = "DELETE FROM aindacochea.awards WHERE awardsId = ?";
+		$statement = $mysqli->prepare($query);
+		if($statement === false) {
+			throw(new mysqli_sql_exception("unable to prepare statement"));
+		}
+
+		// bind the member variables to the place holder in the template
+		$wasClean = $statement->bind_param("i", $this->awardsId);
+		if($wasClean === false) {
+			throw(new mysqli_sql_exception("unable to bind parameters"));
+		}
+
+		// execute the statement
+		if($statement->execute() === false) {
+			throw(new mysqli_sql_exception("unable to execute mySQL statement"));
+		}
+
+		// clean up the statement
+		$statement->close();
+	}
+
+	/**
+	 * updates this Award in mySQL
+	 *
+	 * @param resource $mysqli pointer to mySQL connection, by reference
+	 * @throws mysqli_sql_exception when mySQL related errors occur
+	 **/
+	public function update(&$mysqli) {
+		// handle degenerate cases
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+
+		// enforce the awardsId is not null (i.e., don't update an award that hasn't been inserted)
+		if($this->awardsId === null) {
+			throw(new mysqli_sql_exception("unable to update an award that does not exist"));
+		}
+
+		// create query template
+		$query	 = "UPDATE aindacochea.awards SET albumId = ?, awardsTitle = ?, awardsYear = ? WHERE awardsId = ?";
+		$statement = $mysqli->prepare($query);
+		if($statement === false) {
+			throw(new mysqli_sql_exception("unable to prepare statement"));
+		}
+
+		// bind the member variables to the place holders in the template
+		$wasClean = $statement->bind_param("iisi", $this->awardsId, $this->albumId, $this->awardsTitle, $this->awardsYear);
+		if($wasClean === false) {
+			throw(new mysqli_sql_exception("unable to bind parameters"));
+		}
+
+		// execute the statement
+		if($statement->execute() === false) {
+			throw(new mysqli_sql_exception("unable to execute mySQL statement"));
+		}
+
+		// clean up the statement
+		$statement->close();
+
+	}
 }
 ?>
