@@ -213,7 +213,7 @@ class Awards {
 		}
 
 		// bind the member variables to the place holders in the template
-		$wasClean	  = $statement->bind_param("iisi", $this->awardsId, $this->albumId, $this->awardsTitle, $this->awardsYear);
+		$wasClean	  = $statement->bind_param("iiss", $this->awardsId, $this->albumId, $this->awardsTitle, $this->awardsYear);
 		if($wasClean === false) {
 			throw(new mysqli_sql_exception("unable to bind parameters"));
 		}
