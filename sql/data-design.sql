@@ -14,9 +14,10 @@ CREATE TABLE album (
 	allmusicRating    TINYINT UNSIGNED            NOT NULL,
 	duration          VARCHAR(16)                 NOT NULL,
 	recordingDate     DATE                        NOT NULL,
-	releaseDate       DATE                        NOT NULL,
+	originalReleaseDate       DATE                        NOT NULL,
 	releaseYear       YEAR                        NOT NULL,
 	streamBuy         VARCHAR(1024),
+	UNIQUE(albumId, originalReleaseDate),
 	INDEX(albumId),
 	PRIMARY KEY (albumId)
 );
@@ -29,15 +30,16 @@ CREATE TABLE artist (
 );
 
 CREATE TABLE credits (
+	creditsId INT UNSIGNED AUTO_INCREMENT NOT NULL,
 	albumId INT UNSIGNED NOT NULL,
 	artistId INT UNSIGNED NOT NULL,
-	credits VARCHAR(128),
+	creditsDescription VARCHAR(512),
 	INDEX(albumId),
 	INDEX(artistId),
-	UNIQUE (credits, albumId, artistId),
+	UNIQUE (creditsDescription, albumId, artistId),
 	FOREIGN KEY(artistId) REFERENCES artist(artistId),
 	FOREIGN KEY(albumId) REFERENCES album(albumId),
-	PRIMARY KEY(albumId)
+	PRIMARY KEY(creditsId)
 );
 
 CREATE TABLE awards (

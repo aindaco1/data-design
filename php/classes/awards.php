@@ -308,5 +308,73 @@ class Awards {
 		$statement->close();
 
 	}
+
+	/**
+	 * gets the Award by content
+	 *
+	 * @param resource $mysqli pointer to mySQL connection, by reference
+	 * @param string $awardsTitle tweet content to search for
+	 * @return mixed array of Awards found, or null if not found
+	 * @throws mysqli_sql_exception when mySQL related errors occur
+	 **/
+	public static function getAwardsByAwardsTitle(&$mysqli, $awardsTitle) {
+		// handle degenerate cases
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+
+		// sanitize the title before searching
+		$awardsTitle = trim($awardsTitle);
+		$awardsTitle = filter_var($awardsTitle, FILTER_SANITIZE_STRING);
+
+		// create query template
+		$query	 = "SELECT awardsId, albumId, awardsTitle, awardsYear FROM aindacochea.awards WHERE awardsTitle LIKE ?";
+		$statement = $mysqli->prepare($query);
+		if($statement === false) {
+			throw(new mysqli_sql_exception("unable to prepare statement"));
+		}
+
+		// bind the title to the place holder in the template
+		$awardsTitle = "%$awardsTitle%";
+		$wasClean = $statement->bind_param("s", $awardsTitle);
+		if($wasClean === false) {
+			throw(new mysqli_sql_exception("unable to bind parameters"));
+		}
+
+		// execute the statement
+		if($statement->execute() === false) {
+			throw(new mysqli_sql_exception("unable to execute mySQL statement"));
+		}
+
+		// get result from the SELECT query
+		$result = $statement->get_result();
+		if($result === false) {
+			throw(new mysqli_sql_exception("unable to get result set"));
+		}
+
+		// build an array of awards
+		$awards = array();
+		while(($row = $result->fetch_assoc()) !== null) {
+			try {
+				$awards = new Awards($row["awardsId"], $row["albumId"], $row["awardsTitle"], $row["awardsYear"]);
+				$awards[] = $awards;
+			}
+			catch(Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new mysqli_sql_exception("unable to convert row to Award", 0, $exception));
+			}
+		}
+
+		// count the results in the array and return:
+		// 1) null if 0 results
+		// 2) a single object if 1 result
+		// 3) the entire array if > 1 result
+		$numberOfAwards = count($awards);
+		if($numberOfAwards === 0) {
+			return(null);
+		} else {
+			return($awards);
+		}
+	}
 }
 ?>
